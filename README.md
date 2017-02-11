@@ -25,4 +25,4 @@ the cluster is not configured with cloud so we usually setup the LoadBalancer ma
 
 [Ingress](https://kubernetes.io/docs/user-guide/ingress/) is still in beta at the time i write this. And it requires
 to deploy an Ingress controller plus ingress resource configuration, which will will add more overhead so I prefer
-a quick and simple solution for now.
+a quick and simple solution for now. This will be easier and faster to use Kube-door and get something running.

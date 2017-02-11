@@ -9,7 +9,7 @@ if os.environ.get('KUBECONFIG'):
     kubernetes.config.load_kube_config(os.environ.get('KUBECONFIG'))
 else:
     # behave like kubectl
-    kubernetes.client.configuration.host = "http://localhost:8001"
+    kubernetes.client.configuration.host = "http://localhost:8080"
 
 
 def _get_ip(node):
