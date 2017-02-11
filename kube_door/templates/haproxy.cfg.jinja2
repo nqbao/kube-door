@@ -1,0 +1,33 @@
+# reference: https://gist.github.com/nateware/3987720
+# http://chase-seibert.github.io/blog/2011/02/26/haproxy-quickstart-w-full-example-config-file.html
+
+global
+    maxconn         10000
+    ulimit-n        65536
+    log             127.0.0.1       local0
+    log             127.0.0.1       local1 notice
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  tcplog
+    # timeout configuration
+    timeout client  30s
+    timeout connect 30s
+    timeout server  30s
+
+    # for websockets
+    timeout tunnel  3600s
+
+{% for port, service in ports.items() -%}
+backend {{ service.name }}
+    {% for ip in ips -%}
+    server ip-{{ ip }} {{ ip }}:{{ service.node_port }}
+    {% endfor %}
+
+frontend {{ service.name }}
+    bind 0.0.0.0:{{port}}
+    default_backend {{ service.name }}
+
+{% endfor %}
