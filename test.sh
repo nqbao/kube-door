@@ -1,4 +1,5 @@
 #!/bin/bash
 
+mkdir -p conf
 python -m kube_door > conf/haproxy.cfg
-docker run --rm -p -net host -v `pwd`/conf:/usr/local/etc/haproxy haproxy
+docker run --rm --net=host -v `pwd`/conf:/usr/local/etc/haproxy haproxy
