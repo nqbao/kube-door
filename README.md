@@ -22,7 +22,8 @@ so it can talk to Kubernetes.
 docker run -d \
   -v ~/.kube:/kubeconfig \
   -e KUBECONFIG=/kubeconfig/config \
-  --name=kube-door
+  --net=host \
+  --name=kube-door kube-door
 ```
 
 You will need to expose your service with annotations. You can annotate your service with `kube-door/ports` with the 
