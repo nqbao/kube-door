@@ -9,8 +9,24 @@ The idea is similar to [Marathon-lb](https://github.com/mesosphere/marathon-lb) 
 
 ## How to use this?
 
-You can annotate your service with `kube-door/ports` with the port you want to expose to Kube-door.
-For example, below is a command to expose port 80 from `your_service`.
+First you need to build the docker image
+
+```
+docker build . -t kube-door
+```
+
+Then run the docker image under net host. Additionally, you can mount the kubeconfig and relevant certs to kube-door
+so it can talk to Kubernetes.
+
+```
+docker run -d \
+  -v ~/.kube:/kubeconfig \
+  -e KUBECONFIG=/kubeconfig/config \
+  --name=kube-door
+```
+
+You will need to expose your service with annotations. You can annotate your service with `kube-door/ports` with the 
+port you want to expose to Kube-door. For example, below is a command to expose port 80 from `your_service`.
 
 ```
 kubectl annotate svc/your_service kube-door/ports=80
