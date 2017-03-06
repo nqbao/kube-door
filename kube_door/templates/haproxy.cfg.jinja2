@@ -7,11 +7,18 @@ global
     log             127.0.0.1       local0
     log             127.0.0.1       local1 notice
 
+    # SSL-enanbled parameters
+    ssl-default-bind-ciphers kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL
+    tune.ssl.default-dh-param 2048
+
 defaults
     log     global
     mode    http
     option  httplog
     option  tcplog
+    option  forwardfor
+    option  http-server-close
+
     # timeout configuration
     timeout client  180s
     timeout connect 180s
@@ -20,14 +27,25 @@ defaults
     # for websockets
     timeout tunnel  3600s
 
-{% for port, service in ports.items() -%}
-backend {{ service.name }}
+{% for port, services in ports.items() -%}
+{% for service in services -%}
+backend {{ service.name }}_{{ port }}
     {% for ip in ips -%}
     server ip-{{ ip }} {{ ip }}:{{ service.node_port }}
     {% endfor %}
+{% endfor -%}
 
-frontend {{ service.name }}
+frontend frontend_{{ port }}
     bind 0.0.0.0:{{port}}
-    default_backend {{ service.name }}
+    {% set default_service = services[0] -%}
+
+    {% for service in services -%}
+    {% if service.hostname -%}
+    acl service_{{ service.name }} hdr(host) -i {{ service.hostname }}
+    use_backend {{ service.name }}_{{ port }} if service_{{ service.name }}
+    {% endif -%}
+    {% endfor -%}
+
+    default_backend {{ services[0].name }}_{{ port }}
 
 {% endfor %}

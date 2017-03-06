@@ -38,19 +38,21 @@ def get_exposed_ports():
             continue
 
         exposed_ports = service.metadata.annotations['kube-door/ports'].split(',')
+        hostname = service.metadata.annotations.get('kube-door/hostname', None)
 
         for port in service.spec.ports:
             if not port.node_port or str(port.port) not in exposed_ports:
                 continue
 
             if port.port not in ports:
-                ports[port.port] = {
-                    'name': service.metadata.name,
-                    'namespace': service.metadata.namespace,
-                    'node_port': port.node_port
-                }
-            else:
-                print "There is a conflict on port %s" % port.port
+                ports[port.port] = []
+
+            ports[port.port].append({
+                'hostname': hostname,
+                'name': service.metadata.name,
+                'namespace': service.metadata.namespace,
+                'node_port': port.node_port
+            })
 
     return ports
 

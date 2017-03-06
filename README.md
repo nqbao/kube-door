@@ -33,6 +33,9 @@ port you want to expose to Kube-door. For example, below is a command to expose 
 kubectl annotate svc/your_service kube-door/ports=80
 ```
 
+At the moment, it is required that you have to expose your service with type is `NodePort` or `LoadBalancer` so that
+the service can be access from 
+
 In future, proxy by domain can also be supported.
 
 ## Why don't you use Ingress or expose your service with LoadBalancer?
@@ -47,3 +50,10 @@ a quick and simple solution for now. This will be easier and faster to use Kube-
 In fact, this is very similar to [Service LoadBalancer](https://github.com/kubernetes/contrib/tree/master/service-loadbalancer),
 but this requires you to run the load balancer on kubernetes nodes. Having the security requirements cleanly separated
 for internal access and external access is more preferred.
+
+## TODO
+
+ - [ ] Support proxy based by domain
+ - [ ] Support TCP load balancing
+ - [ ] Support SSL termination
+ - [ ] Support configuration override
