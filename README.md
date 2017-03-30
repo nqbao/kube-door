@@ -53,7 +53,8 @@ for internal access and external access is more preferred.
 
 ## TODO
 
- - [ ] Support proxy based by domain
+ - [x] Support proxy based by domain
+ - [ ] Auto update configuration
  - [ ] Support TCP load balancing
  - [ ] Support SSL termination
  - [ ] Support configuration override

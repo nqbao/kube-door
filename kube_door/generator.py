@@ -7,6 +7,8 @@ import jinja2
 # read config from KUBECONFIG environment
 if os.environ.get('KUBECONFIG'):
     kubernetes.config.load_kube_config(os.environ.get('KUBECONFIG'))
+    # https://github.com/kubernetes-incubator/client-python/issues/165
+    kubernetes.client.configuration.assert_hostname = False
 else:
     # behave like kubectl
     kubernetes.client.configuration.host = "http://localhost:8080"
