@@ -42,8 +42,6 @@ kubectl annotate svc/your_service kube-door/hostname=your_hostname.com
 At the moment, it is required that you have to expose your service with type is `NodePort` or `LoadBalancer` so that
 the service can be access from 
 
-In future, proxy by domain can also be supported.
-
 ## Why don't you use Ingress or expose your service with LoadBalancer?
 
 If your kuberentes cluster has cloud configuration, then it's best to just use service type `LoadBalancer`. In my case,
