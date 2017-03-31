@@ -3,10 +3,7 @@
 set -e
 
 echo "Generating haproxy config ..."
-(
-  cd /opt/kube-door
-  python -m kube_door > /etc/haproxy/haproxy.cfg
-)
+cd /opt/kube-door
+python -m kube_door --output /etc/haproxy/haproxy.cfg --auto-update &
 
-echo "Running haproxy ..."
-exec haproxy -f /etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid
+tail -f /dev/null

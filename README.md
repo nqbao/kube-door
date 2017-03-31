@@ -33,6 +33,12 @@ port you want to expose to Kube-door. For example, below is a command to expose 
 kubectl annotate svc/your_service kube-door/ports=80
 ```
 
+You can also annotate with hostname to expose your service via hostname
+
+```
+kubectl annotate svc/your_service kube-door/hostname=your_hostname.com
+```
+
 At the moment, it is required that you have to expose your service with type is `NodePort` or `LoadBalancer` so that
 the service can be access from 
 
@@ -54,7 +60,7 @@ for internal access and external access is more preferred.
 ## TODO
 
  - [x] Support proxy based by domain
- - [ ] Auto update configuration
+ - [x] Auto update configuration
  - [ ] Support TCP load balancing
  - [ ] Support SSL termination
  - [ ] Support configuration override

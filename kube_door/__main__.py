@@ -1,5 +1,7 @@
 import argparse
 import time
+import sys
+import subprocess
 
 from .generator import get_exposed_ports, get_node_ips, render_haproxy
 
@@ -21,13 +23,26 @@ if args.output:
 
     if args.auto_update:
         prev_content = None
+        retries = 0
         print "Watching for changes ..."
         while True:
-            content = render_haproxy(get_exposed_ports(), get_node_ips())
+            try:
+                content = render_haproxy(get_exposed_ports(), get_node_ips())
+                retries = 0
 
-            if content != prev_content:
-                write_to_output(content)
-                prev_content = content
+                if content != prev_content:
+                    write_to_output(content)
+                    prev_content = content
+
+                    # Only support this for now
+                    subprocess.check_call(["service", "haproxy", "restart"])
+            except Exception as ex:
+                print "Unable to fetch config"
+                print ex
+                retries += 1
+
+                if retries > 10:
+                    sys.exit(1)
 
             time.sleep(10)
     else:
